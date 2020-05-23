@@ -1,0 +1,237 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cause API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/causes/{causeId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "causeId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "/causes/{causeId}",
+        "tags": [],
+        "responses": {},
+        "operationId": "get-causes-causeId"
+      },
+      "post": {
+        "summary": "",
+        "operationId": "post-causes-causeId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "summary": "/causes/{causeId}",
+        "operationId": "put-causes-causeId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "update a cause\n"
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-causes-causeId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/casues/{causeId}/evidences": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "causeId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "/casues/{causeId}/evidences",
+        "tags": [],
+        "responses": {},
+        "operationId": "get-casues-causeId-evidences"
+      }
+    },
+    "/causes/{causeId}/proofs": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "causeId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "/causes/{causeId}/proofs",
+        "tags": [],
+        "responses": {},
+        "operationId": "get-causes-causeId-documents"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Cause": {
+        "title": "Cause",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "description": "This is the reason a donee wants to be helped. It offers evidences in the first stage, and optional proofs once the goal has reached.",
+        "x-examples": {
+          "cause-example": {
+            "cause": {
+              "id": "3ff593b1-bef2-41ab-a3c5-503b1c965e01",
+              "category": "animalitos",
+              "title": "Necesito dinero para vacunar a mi perrito",
+              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "requiredAmount": {
+                "amount": "500.00",
+                "currency": "Mexican pesos",
+                "code": "MXN",
+                "sign": "$"
+              },
+              "publicationDate": "2020-05-09T03:17:10.371Z",
+              "expirationDate": "2020-05-09T03:17:10.371Z",
+              "frecuency": "unique",
+              "donee": {
+                "id": "66c86fe7-2b48-463d-8666-aa43cd400142",
+                "name": "Alex Díaz",
+                "city": "Ciudad de México"
+              },
+              "evidence": [
+                {
+                  "id": "5fc45c96-6357-4b65-af0c-c9eb0db51f88",
+                  "index": "0",
+                  "datetime": "2020-10-31T01:48:52Z",
+                  "file": {
+                    "type": "image",
+                    "format": "image/jpeg",
+                    "size": "30kb",
+                    "properties": {
+                      "height": "100px",
+                      "width": "200px"
+                    },
+                    "url": "s3.ayudamex.bucket.something"
+                  },
+                  "approval": {
+                    "status": "rejected",
+                    "reviwer": "28ddab76-8b79-4612-9614-a32d275be3c4",
+                    "date": "2020-05-09T03:17:10.372Z",
+                    "comment": "At vero eos et accusamus et iusto odio dignissimos ducimus."
+                  }
+                },
+                {
+                  "id": "2455e58f-307c-4f49-9a54-7df45345958d",
+                  "index": "1",
+                  "datetime": "2020-10-31T01:48:52Z",
+                  "file": {
+                    "type": "document",
+                    "mimeType": "application/pdf",
+                    "size": "100kb",
+                    "properties": {
+                      "pageSize": "612x792pts (letter)",
+                      "pages": "2"
+                    },
+                    "url": "s3.ayudamex.bucket.somethingElse"
+                  },
+                  "approval": {
+                    "status": "rejected",
+                    "reviewer": "28ddab76-8b79-4612-9614-a32d275be3c4",
+                    "date": "2020-05-09T03:17:10.372Z",
+                    "comment": "At vero eos et accusamus et iusto odio dignissimos ducimus."
+                  }
+                }
+              ],
+              "approval": {
+                "status": "approved",
+                "reviewer": "28ddab76-8b79-4612-9614-a32d275be3c4",
+                "date": "2020-05-09T03:17:10.372Z",
+                "comment": "Et harum quidem rerum facilis est et expedita distinctio."
+              },
+              "metadata": {
+                "codeName": "Mozilla",
+                "name": "Netscape",
+                "version": "5.0 (Windows)",
+                "cookiesEnabled": "true",
+                "platform": "Win32",
+                "userAgentHeader": "Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0",
+                "latitude": "19.3003889",
+                "longitude": "-99.2009923"
+              },
+              "amountDonated": "250.00"
+            }
+          }
+        }
+      },
+      "Proof": {
+        "title": "Proof",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Evidence": {
+        "title": "Evidence",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "x-examples": {
+          "evidence-example": {
+            "id": "5fc45c96-6357-4b65-af0c-c9eb0db51f88",
+            "index": "0",
+            "datetime": "2020-10-31T01:48:52Z",
+            "file": {
+              "type": "image",
+              "format": "image/jpeg",
+              "size": "30kb",
+              "properties": {
+                "height": "100px",
+                "width": "200px"
+              },
+              "url": "s3.ayudamex.bucket.something"
+            },
+            "approval": {
+              "status": "rejected",
+              "reviwer": "28ddab76-8b79-4612-9614-a32d275be3c4",
+              "date": "2020-05-09T03:17:10.372Z",
+              "comment": "At vero eos et accusamus et iusto odio dignissimos ducimus."
+            }
+          }
+        },
+        "description": "Referes to the files a doneee must attach in order to illustrate his need."
+      }
+    }
+  }
+}

@@ -1,0 +1,291 @@
+openapi: 3.0.0
+info:
+  title: AyudaMex API
+  version: '1.0'
+  contact:
+    name: Alejandro Bugajski
+  description: AyudaMex API ofrece endpoints para..
+servers:
+  - url: 'http://api/v1'
+paths:
+  donees: null
+  '/donees/{id}':
+    get:
+      summary: Get all donees by id
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: get-donees
+      description: Get all donees from database
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+  /donors:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-donors
+  /evidences:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-evidences
+  /donations:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-donations
+  '/donees/{limit}/{orderBy}':
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-donees
+      description: s
+    parameters:
+      - schema:
+          type: integer
+        name: limit
+        in: path
+        description: |
+          limit the results tothe number specified
+      - schema:
+          type: string
+        name: orderBy
+        in: path
+  '/donations/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get a donor by id
+      tags: []
+      responses: {}
+      operationId: get-donations-id
+    post:
+      summary: ''
+      operationId: post-donations-id
+      responses:
+        '200':
+          description: OK
+      description: Posts a new donation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                cause:
+                  type: object
+                  properties:
+                    '':
+                      type: string
+                donor:
+                  type: string
+                '':
+                  type: string
+            examples:
+              example-1:
+                value:
+                  name: Alejandro
+                  gender: masculino
+  '/causes/{id}/{status}/{user}':
+    get:
+      summary: '/causes/{id}/{status}/{user}'
+      tags: []
+      responses: {}
+      operationId: get-causes
+      description: Get all causes of donation exposes by donees
+    put:
+      summary: ''
+      operationId: put-causes
+      responses:
+        '200':
+          description: OK
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+      - schema:
+          type: number
+        name: status
+        in: path
+        required: true
+        description: The status a cause is at any moment
+      - schema:
+          type: string
+        name: user
+        in: path
+        required: true
+        description: The admin user performing the action
+  '/causes/evidences/{limit}/{orderBy}/{filterBy}':
+    get:
+      summary: /causes/evidences/
+      tags: []
+      responses: {}
+      operationId: get-causes-evidences
+    parameters:
+      - schema:
+          type: number
+        name: limit
+        in: path
+      - schema:
+          type: string
+        name: orderBy
+        in: path
+      - schema:
+          type: string
+        name: filterBy
+        in: path
+        required: true
+  '/causes/{id}/evidences':
+    get:
+      summary: '/causes/{id}/evidences'
+      tags: []
+      responses: {}
+      operationId: get-causes-id-evidences
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+  '/donees/{id}/documents':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Gets all documents from specific donee
+      tags: []
+      responses: {}
+      operationId: get-donees-id-documents
+      description: Gets all documents paths of any category from specific donee
+  '/causes/{id}/evidences/':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+      - required: true
+components:
+  schemas:
+    Donor:
+      title: Donor
+      type: object
+      properties:
+        id:
+          type: string
+      x-examples:
+        example-1: {}
+    Evidence:
+      title: Evidence
+      type: object
+      x-examples:
+        evidence-example:
+          evidence:
+            - id: 5fc45c96-6357-4b65-af0c-c9eb0db51f88
+              index: '0'
+              datetime: '2020-10-31T01:48:52Z'
+              file:
+                type: image
+                format: image/jpeg
+                size: 30kb
+                properties:
+                  height: 100px
+                  width: 200px
+                url: s3.ayudamex.bucket.something
+              approval:
+                status: rejected
+                reviwer: 28ddab76-8b79-4612-9614-a32d275be3c4
+                date: '2020-05-09T03:17:10.372Z'
+                comment: At vero eos et accusamus et iusto odio dignissimos ducimus.
+            - id: 2455e58f-307c-4f49-9a54-7df45345958d
+              index: '1'
+              datetime: '2020-10-31T01:48:52Z'
+              file:
+                type: document
+                mimeType: application/pdf
+                size: 100kb
+                properties:
+                  pageSize: 612x792pts (letter)
+                  pages: '2'
+                url: s3.ayudamex.bucket.somethingElse
+              approval:
+                status: rejected
+                reviwer: 28ddab76-8b79-4612-9614-a32d275be3c4
+                date: '2020-05-09T03:17:10.372Z'
+                comment: At vero eos et accusamus et iusto odio dignissimos ducimus.
+      description: ''
+      properties:
+        id:
+          type: string
+    Cause:
+      title: Cause
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          type: string
+          enum:
+            - animalitos
+            - comida
+            - vivienda
+            - educación
+            - salud
+            - vivienda
+        title:
+          type: string
+        description:
+          type: string
+        requiredAmount:
+          type: object
+          required:
+            - amount
+            - currency
+            - code
+            - sign
+          properties:
+            amount:
+              type: string
+            currency:
+              type: string
+            code:
+              type: string
+            sign:
+              type: string
+        publicationDate:
+          type: string
+          format: date-time
+        expirationDate:
+          type: string
+          format: date-time
+        adsad:
+          type: string
+      required:
+        - id
+        - category
+        - title
+        - description
+        - requiredAmount
+        - publicationDate
+        - expirationDate
+  securitySchemes: {}
