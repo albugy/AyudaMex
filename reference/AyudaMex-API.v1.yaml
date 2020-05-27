@@ -6,7 +6,7 @@ info:
     name: Alejandro Bugajski
   description: AyudaMex API ofrece endpoints para..
 servers:
-  - url: 'http://api/v1'
+  - url: 'https://1nyg1iwrck.execute-api.us-east-2.amazonaws.com/test'
 paths:
   donees: null
   '/donees/{id}':
