@@ -2,290 +2,739 @@ openapi: 3.0.0
 info:
   title: AyudaMex API
   version: '1.0'
-  contact:
-    name: Alejandro Bugajski
-  description: AyudaMex API ofrece endpoints para..
+  description: 'AyudaMex API lets create new users, causes and save donations as well as fetch data from such topics.'
 servers:
-  - url: 'https://1nyg1iwrck.execute-api.us-east-2.amazonaws.com/test'
+  - url: 'http://localhost:3000'
 paths:
-  donees: null
-  '/donees/{id}':
+  '/causes/{limitTo}/{orderBy}/{filterBy}':
     get:
-      summary: Get all donees by id
-      tags: []
+      summary: Get all causes
+      tags:
+        - Causes
       responses:
         '200':
           description: OK
-      operationId: get-donees
-      description: Get all donees from database
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-  /donors:
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-donors
-  /evidences:
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-evidences
-  /donations:
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-donations
-  '/donees/{limit}/{orderBy}':
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-donees
-      description: s
-    parameters:
-      - schema:
-          type: integer
-        name: limit
-        in: path
-        description: |
-          limit the results tothe number specified
-      - schema:
-          type: string
-        name: orderBy
-        in: path
-  '/donations/{id}':
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-    get:
-      summary: Get a donor by id
-      tags: []
-      responses: {}
-      operationId: get-donations-id
-    post:
-      summary: ''
-      operationId: post-donations-id
-      responses:
-        '200':
-          description: OK
-      description: Posts a new donation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                cause:
-                  type: object
-                  properties:
-                    '':
-                      type: string
-                donor:
-                  type: string
-                '':
-                  type: string
-            examples:
-              example-1:
-                value:
-                  name: Alejandro
-                  gender: masculino
-  '/causes/{id}/{status}/{user}':
-    get:
-      summary: '/causes/{id}/{status}/{user}'
-      tags: []
-      responses: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cause'
+              examples:
+                AnimalCause:
+                  value:
+                    cause_id: a9db34eb-67f8-45f0-b87b-aa8cf9037cd9
+                    donee_id: 283fc95d-d1cc-4b5a-9827-61e4b27f0b5c
+                    title: Ayuda para mis perritos
+                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                    category: Animales
+                    required_amount:
+                      amount: 500
+                      currency: MXN
+                    creation_date: '2020-07-01T14:59:55.711Z'
+                    expiration_date: '2020-09-01T14:59:55.711Z'
+                    evidences:
+                      - 1d9374f0-f430-45ad-a546-94f444e7c5ce
+                      - 9274306c-e818-4242-b2ab-b3117e2f8835
+                      - 66aae630-a5ac-4798-81c8-ff2ca81876d5
+                      - b901e9ce-6282-4199-9598-6fb29f05d747
+                    proofs:
+                      - 5f35050b-9121-437b-bbff-c56c2972fb30
+                      - 7d5c4f45-6ee8-4a5f-a405-5d21252686e6
+                      - 5cf2589b-7455-438f-bdd8-adf81d05eb7b
+                    review:
+                      user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+                      approval: Pending
+                      modification_date: '2020-06-01T14:59:55.711Z'
+                      comment: ''
+                    metadata:
+                      browser_details:
+                        code_name: Mozilla
+                        name: Netscape
+                        version: 5.0 (Windows)
+                        cookies_nabled: 'true'
+                        platform: Win32
+                        user_agent_header: 'Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0'
       operationId: get-causes
-      description: Get all causes of donation exposes by donees
-    put:
-      summary: ''
-      operationId: put-causes
-      responses:
-        '200':
-          description: OK
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-      - schema:
-          type: number
-        name: status
-        in: path
-        required: true
-        description: The status a cause is at any moment
-      - schema:
-          type: string
-        name: user
-        in: path
-        required: true
-        description: The admin user performing the action
-  '/causes/evidences/{limit}/{orderBy}/{filterBy}':
-    get:
-      summary: /causes/evidences/
-      tags: []
-      responses: {}
-      operationId: get-causes-evidences
     parameters:
       - schema:
           type: number
-        name: limit
+          minimum: 1
+          maximum: 50
+        name: limitTo
         in: path
+        required: true
       - schema:
           type: string
         name: orderBy
         in: path
+        required: true
       - schema:
           type: string
         name: filterBy
         in: path
         required: true
-  '/causes/{id}/evidences':
-    get:
-      summary: '/causes/{id}/evidences'
-      tags: []
-      responses: {}
-      operationId: get-causes-id-evidences
+  '/causes/{cause_id}':
     parameters:
       - schema:
           type: string
-        name: id
-        in: path
-        required: true
-  '/donees/{id}/documents':
-    parameters:
-      - schema:
-          type: string
-        name: id
+        name: cause_id
         in: path
         required: true
     get:
-      summary: Gets all documents from specific donee
-      tags: []
-      responses: {}
-      operationId: get-donees-id-documents
-      description: Gets all documents paths of any category from specific donee
-  '/causes/{id}/evidences/':
+      summary: Get a specific cause by id
+      tags:
+        - Causes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cause'
+      operationId: get-causes-cause_id
+  '/causes/{cause_id}/evidences':
     parameters:
       - schema:
           type: string
-        name: id
+        name: cause_id
         in: path
         required: true
-      - required: true
+    get:
+      summary: Get all evidences from a specific cause
+      tags:
+        - Causes
+        - Evidences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evidence'
+            application/xml:
+              schema:
+                type: object
+      operationId: get-causes-cause_id-evidences
+  '/causes/{cause_id}/proofs':
+    get:
+      summary: Get all proofs for a specific cause
+      tags:
+        - Causes
+        - Proofs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proof'
+      operationId: get-causes-cause_id-proofs
+      description: ''
+    parameters:
+      - schema:
+          type: string
+        name: cause_id
+        in: path
+        required: true
+  '/causes/{cause_id}/proofs{proof_id}':
+    parameters:
+      - schema:
+          type: string
+        name: cause_id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: proof_id
+        in: path
+        required: true
+    get:
+      summary: Get a specific proof of a cause
+      tags:
+        - Causes
+        - Proofs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proof'
+      operationId: get-causes-cause_id-proofs-proof_id
 components:
   schemas:
-    Donor:
-      title: Donor
-      type: object
-      properties:
-        id:
-          type: string
-      x-examples:
-        example-1: {}
-    Evidence:
-      title: Evidence
-      type: object
-      x-examples:
-        evidence-example:
-          evidence:
-            - id: 5fc45c96-6357-4b65-af0c-c9eb0db51f88
-              index: '0'
-              datetime: '2020-10-31T01:48:52Z'
-              file:
-                type: image
-                format: image/jpeg
-                size: 30kb
-                properties:
-                  height: 100px
-                  width: 200px
-                url: s3.ayudamex.bucket.something
-              approval:
-                status: rejected
-                reviwer: 28ddab76-8b79-4612-9614-a32d275be3c4
-                date: '2020-05-09T03:17:10.372Z'
-                comment: At vero eos et accusamus et iusto odio dignissimos ducimus.
-            - id: 2455e58f-307c-4f49-9a54-7df45345958d
-              index: '1'
-              datetime: '2020-10-31T01:48:52Z'
-              file:
-                type: document
-                mimeType: application/pdf
-                size: 100kb
-                properties:
-                  pageSize: 612x792pts (letter)
-                  pages: '2'
-                url: s3.ayudamex.bucket.somethingElse
-              approval:
-                status: rejected
-                reviwer: 28ddab76-8b79-4612-9614-a32d275be3c4
-                date: '2020-05-09T03:17:10.372Z'
-                comment: At vero eos et accusamus et iusto odio dignissimos ducimus.
-      description: ''
-      properties:
-        id:
-          type: string
     Cause:
       title: Cause
       type: object
+      x-examples:
+        ExampleCause:
+          cause_id: a9db34eb-67f8-45f0-b87b-aa8cf9037cd9
+          donee_id: 283fc95d-d1cc-4b5a-9827-61e4b27f0b5c
+          title: Ayuda para mis perritos
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+          category: Animales
+          required_amount:
+            amount: 500
+            currency: MXN
+          creation_date: '2020-07-01T14:59:55.711Z'
+          expiration_date: '2020-09-01T14:59:55.711Z'
+          evidences:
+            - 1d9374f0-f430-45ad-a546-94f444e7c5ce
+            - 9274306c-e818-4242-b2ab-b3117e2f8835
+            - 66aae630-a5ac-4798-81c8-ff2ca81876d5
+            - b901e9ce-6282-4199-9598-6fb29f05d747
+          proofs:
+            - 5f35050b-9121-437b-bbff-c56c2972fb30
+            - 7d5c4f45-6ee8-4a5f-a405-5d21252686e6
+            - 5cf2589b-7455-438f-bdd8-adf81d05eb7b
+          review:
+            user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+            approval: Pending
+            modification_date: '2020-06-01T14:59:55.711Z'
+            comment: ''
+          metadata:
+            browser_details:
+              code_name: Mozilla
+              name: Netscape
+              version: 5.0 (Windows)
+              cookies_nabled: 'true'
+              platform: Win32
+              user_agent_header: 'Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0'
+      description: 'This is the reason a donee wants to be helped. It offers evidences in the first stage, and optional proofs once the goal has reached.'
       properties:
-        id:
+        cause_id:
           type: string
-        category:
+        donee_id:
           type: string
-          enum:
-            - animalitos
-            - comida
-            - vivienda
-            - educación
-            - salud
-            - vivienda
         title:
           type: string
         description:
           type: string
-        requiredAmount:
+        category:
+          type: string
+          enum:
+            - Animales
+            - Vivienda
+            - Salud
+            - Educación
+            - Alimentación
+            - Medio ambiente
+        required_amount:
           type: object
-          required:
-            - amount
-            - currency
-            - code
-            - sign
+          properties:
+            amount:
+              type: number
+              format: double
+            currency:
+              type: string
+        creation_date:
+          type: string
+        expiration_date:
+          type: string
+        evidences:
+          type: array
+          items:
+            type: string
+        proofs:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+        review:
+          type: object
+          properties:
+            user_id:
+              type: string
+            status:
+              type: string
+              enum:
+                - Pending
+                - Approved
+                - Rejected
+            modification_date:
+              type: string
+            comment:
+              type: string
+        status:
+          type: string
+      x-tags:
+        - Causes
+    User:
+      title: User
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier for the object.
+        phone:
+          type: string
+          description: The user’s phone number
+        emailemail:
+          type: string
+        status:
+          type: string
+          enum:
+            - Pending
+            - Approved
+            - Rejected
+            - Banned
+      x-tags:
+        - User
+      description: User signed in AyudaMex platform.
+    Donee:
+      title: Donee
+      type: object
+      description: A person that receives money in order to accomplish a cause exposed.
+      x-examples:
+        Donee Example:
+          donee_id: 2843ce41-5a7d-4a1c-8ee4-c254edcda01d
+          user_id: 39bf7202-5933-4e6d-ba54-792466f3bfb6
+          name: Artemio Sánchez Iguala
+          birthdate: 1954/06/05
+          gender: M
+          curp: SAIA540605HOXSAC06
+          document:
+            category: Identificación Oficial
+            id: 86d17736-1b4c-499b-b332-784e7e2c6bef
+          address:
+            document_id: 6d483dda-4454-48b5-8bc3-0c06fec05b6d
+            country: MX
+            state: MX-OAX
+            city: Santiago Amoltepec
+            street1: 'Ranchería, Barranca Cosida'
+            street2: Casa 4
+            zip_code: '71388'
+            document:
+              category: Teléfono
+              id: 9117af23-7293-4052-ab35-9fc5d2ad38bc
+          job:
+            type: Autoempleado
+            description: Artesano
+            seniority:
+              total: 30
+              unit: años
+            income:
+              amount: '100'
+              currency: MXN
+              frequency: Diaria
+            document:
+              category: Factura
+              id: 86d17736-1b4c-499b-b332-784e7e2c6bef
+      x-tags:
+        - Donee
+      properties:
+        donee_id:
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        gender:
+          type: string
+          enum:
+            - M
+            - F
+            - I
+        document:
+          type: object
+          properties:
+            id:
+              type: string
+            category:
+              type: string
+        address:
+          type: object
+          properties:
+            document_id:
+              type: string
+            country:
+              type: string
+              description: Two-letter country code (ISO 3166-1 alpha-2).
+              example: MX
+            state:
+              type: string
+              description: 'Three-letter state code (3-letter code (ISO 3166-2:MX).'
+            city:
+              type: string
+              description: 'City, district, suburb, town, or village.'
+            street1:
+              type: string
+              description: 'Address line 1 (e.g., street, alley, dead end, etc.).'
+            street2:
+              type: string
+              description: 'Address line 2 (e.g., apartment, suite, unit, or building).'
+            postal_code:
+              type: string
+              description: ZIP or postal code.
+        job:
+          type: object
+          properties:
+            category:
+              type: string
+              enum:
+                - Autoempleado
+                - Asalariado
+                - Ama de casa
+                - Desempleado
+            description:
+              type: string
+              enum:
+                - Artesano
+                - Albañil
+                - Chofer
+                - Cargador
+                - Carpintero
+            document:
+              type: object
+              properties:
+                id:
+                  type: string
+                category:
+                  type: string
+            seniority:
+              type: object
+              properties:
+                total:
+                  type: number
+                unit:
+                  type: string
+                  enum:
+                    - Años
+                    - Meses
+                    - Días
+            income:
+              type: object
+              properties:
+                amount:
+                  type: number
+                currency:
+                  type: string
+                  description: Three letters of currency of income (ISO 4217 Code Alpha-3).
+                frequency:
+                  type: string
+                  enum:
+                    - Diaria
+                    - Semanal
+                    - Quincenal
+                    - Mensual
+              required:
+                - currency
+    Donnor:
+      title: Donnor
+      type: object
+      description: A person that gives money in order to help to accomplish a cause exposed.
+      x-examples:
+        Donee Example:
+          donee_id: 2843ce41-5a7d-4a1c-8ee4-c254edcda01d
+          user_id: 39bf7202-5933-4e6d-ba54-792466f3bfb6
+          name: Artemio Sánchez Iguala
+          birthdate: 1954/06/05
+          gender: M
+          curp: SAIA540605HOXSAC06
+          document:
+            category: Identificación Oficial
+            id: 86d17736-1b4c-499b-b332-784e7e2c6bef
+          address:
+            document_id: 6d483dda-4454-48b5-8bc3-0c06fec05b6d
+            country: MX
+            state: MX-OAX
+            city: Santiago Amoltepec
+            street1: 'Ranchería, Barranca Cosida'
+            street2: Casa 4
+            zip_code: '71388'
+            document:
+              category: Teléfono
+              id: 9117af23-7293-4052-ab35-9fc5d2ad38bc
+          job:
+            type: Autoempleado
+            description: Artesano
+            seniority:
+              total: 30
+              unit: años
+            income:
+              amount: '100'
+              currency: MXN
+              frequency: Diaria
+            document:
+              category: Factura
+              id: 86d17736-1b4c-499b-b332-784e7e2c6bef
+      properties:
+        donee_id:
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        gender:
+          type: string
+          enum:
+            - M
+            - F
+            - I
+        document:
+          type: object
+          properties:
+            id:
+              type: string
+            category:
+              type: string
+        address:
+          type: object
+          properties:
+            document_id:
+              type: string
+            country:
+              type: string
+              description: Two-letter country code (ISO 3166-1 alpha-2).
+              example: MX
+            state:
+              type: string
+              description: 'Three-letter state code (3-letter code (ISO 3166-2:MX).'
+            city:
+              type: string
+              description: 'City, district, suburb, town, or village.'
+            street1:
+              type: string
+              description: 'Address line 1 (e.g., street, alley, dead end, etc.).'
+            street2:
+              type: string
+              description: 'Address line 2 (e.g., apartment, suite, unit, or building).'
+            postal_code:
+              type: string
+              description: ZIP or postal code.
+        job:
+          type: object
+          properties:
+            category:
+              type: string
+              enum:
+                - Autoempleado
+                - Asalariado
+                - Ama de casa
+                - Desempleado
+            description:
+              type: string
+              enum:
+                - Artesano
+                - Albañil
+                - Chofer
+                - Cargador
+                - Carpintero
+            document:
+              type: object
+              properties:
+                id:
+                  type: string
+                category:
+                  type: string
+            seniority:
+              type: object
+              properties:
+                total:
+                  type: number
+                unit:
+                  type: string
+                  enum:
+                    - Años
+                    - Meses
+                    - Días
+            income:
+              type: object
+              properties:
+                amount:
+                  type: number
+                currency:
+                  type: string
+                  description: Three letters of currency of income (ISO 4217 Code Alpha-3).
+                frequency:
+                  type: string
+                  enum:
+                    - Diaria
+                    - Semanal
+                    - Quincenal
+                    - Mensual
+              required:
+                - currency
+      x-tags:
+        - Donnor
+    Document:
+      title: Document
+      type: object
+      x-examples:
+        Documento de identidad:
+          document_id: 5fc45c96-6357-4b65-af0c-c9eb0db51f88
+          purpose: Identidad
+          creation_date: '2020-10-31T01:48:52Z'
+          file_id: 232334789-
+          review:
+            user_id: image/jpeg
+            status: 300 bytes
+            comment: ''
+            url: s3.ayudamex.bucket.something
+      description: A piece of electronic matter that provides information or evidence or that serves as an official record for an aspect of a user
+      properties:
+        document_id:
+          type: string
+          format: uuid
+        purpose:
+          type: string
+          enum:
+            - Identidad
+            - Trabajo
+            - Domicilio
+            - Ingresos
+        document_type:
+          type: string
+          enum:
+            - INE
+            - IFE
+            - TELMEX
+            - CFE
+        creation_date:
+          type: string
+        file:
+          type: string
+          format: uuid
+        review:
+          type: object
+          properties:
+            user_id:
+              type: string
+            status:
+              type: string
+              enum:
+                - Pending
+                - Approved
+                - Rejected
+            modification_date:
+              type: string
+            comment:
+              type: string
+      x-tags:
+        - Document
+    File:
+      title: File
+      type: object
+      x-examples:
+        Archivo de imagen:
+          mime_type: image/jpeg
+          filename: ine2000.jpg
+          size: 300 bytes
+          properties:
+            height: 100px
+            width: 200px
+          creation_date: ''
+          url: s3.ayudamex.bucket.something
+      properties:
+        format:
+          type: string
+        size:
+          type: string
+        properties:
+          type: object
+          properties:
+            height:
+              type: string
+            width:
+              type: string
+        url:
+          type: string
+          format: uri
+        filename`:
+          type: string
+        creation_date:
+          type: string
+      x-tags:
+        - File
+      description: A object for holding the many documents hosted by AyudaMex.
+    Evidence:
+      title: Evidence
+      type: object
+      properties:
+        evidence_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        creation_date:
+          type: string
+        file_id:
+          type: string
+      x-tags:
+        - Evidences
+      description: A document that illustrates the need of the cause.
+    Proof:
+      title: Proof
+      type: object
+      properties:
+        proof_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        creation_date:
+          type: string
+        file_id:
+          type: string
+      x-tags:
+        - Proof
+      description: Evidence that help to establish that the money recieved was used to accomplish the cause.
+    Donation:
+      title: Donation
+      type: object
+      properties:
+        donation_id:
+          type: string
+        cause_id:
+          type: string
+        donnor_id:
+          type: string
+        amount_donated:
+          type: object
           properties:
             amount:
               type: string
             currency:
               type: string
-            code:
+        transfer:
+          type: object
+          properties:
+            transfer_id:
               type: string
-            sign:
+        donation_date:
+          type: string
+      x-tags:
+        - Donation
+      description: 'The act of transfering money to a donee from a donnor in order to benefit a cause. '
+    Transfer:
+      title: Transfer
+      type: object
+      properties:
+        transfer_id:
+          type: string
+        details:
+          type: object
+          properties:
+            provider:
               type: string
-        publicationDate:
+            transaction_code:
+              type: string
+            amount:
+              type: string
+        status:
           type: string
-          format: date-time
-        expirationDate:
+        transfer_date:
           type: string
-          format: date-time
-        adsad:
+        '':
           type: string
-      required:
-        - id
-        - category
-        - title
-        - description
-        - requiredAmount
-        - publicationDate
-        - expirationDate
-  securitySchemes: {}
+      x-tags:
+        - Transfer
+      description: The object that hold the information of the transaction from donnor to donee using a given provider.
