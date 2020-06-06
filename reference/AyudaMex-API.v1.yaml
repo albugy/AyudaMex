@@ -3,12 +3,38 @@ info:
   title: AyudaMex API
   version: '1.0'
   description: 'AyudaMex API lets create new users, causes and save donations as well as fetch data from such topics.'
+  contact:
+    name: Alejandro Bugajski
 servers:
-  - url: 'http://localhost:3000'
+  - url: 'https://hzcqtp3m22.execute-api.us-east-2.amazonaws.com/dev'
+    description: Development
+tags:
+  - name: Causes
+    description: Everything about your Pets
+  - name: Proofs
+    description: Access to Petstore orders
+  - name: Users
+    description: Operations about user
+  - name: Donees
+    description: Operations about user
+  - name: Donnors
+    description: Operations about user
+  - name: Donations
+    description: Operations about user
+  - name: Reviews
+    description: Operations about user
+  - name: Evidences
+    description: Operations about user
+  - name: Files
+    description: Operations about user
+  - name: Transfers
+    description: Operations about user
+  - name: Documents
+    description: Operations about user
 paths:
-  '/causes/{limitTo}/{orderBy}/{filterBy}':
+  /causes:
     get:
-      summary: Get all causes
+      summary: Get a list of causes
       tags:
         - Causes
       responses:
@@ -17,70 +43,106 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cause'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cause'
               examples:
                 AnimalCause:
                   value:
-                    cause_id: a9db34eb-67f8-45f0-b87b-aa8cf9037cd9
-                    donee_id: 283fc95d-d1cc-4b5a-9827-61e4b27f0b5c
-                    title: Ayuda para mis perritos
-                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                    category: Animales
-                    required_amount:
-                      amount: 500
-                      currency: MXN
-                    creation_date: '2020-07-01T14:59:55.711Z'
-                    expiration_date: '2020-09-01T14:59:55.711Z'
-                    evidences:
-                      - 1d9374f0-f430-45ad-a546-94f444e7c5ce
-                      - 9274306c-e818-4242-b2ab-b3117e2f8835
-                      - 66aae630-a5ac-4798-81c8-ff2ca81876d5
-                      - b901e9ce-6282-4199-9598-6fb29f05d747
-                    proofs:
-                      - 5f35050b-9121-437b-bbff-c56c2972fb30
-                      - 7d5c4f45-6ee8-4a5f-a405-5d21252686e6
-                      - 5cf2589b-7455-438f-bdd8-adf81d05eb7b
-                    review:
-                      user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
-                      approval: Pending
-                      modification_date: '2020-06-01T14:59:55.711Z'
-                      comment: ''
-                    metadata:
-                      browser_details:
-                        code_name: Mozilla
-                        name: Netscape
-                        version: 5.0 (Windows)
-                        cookies_nabled: 'true'
-                        platform: Win32
-                        user_agent_header: 'Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0'
+                    - cause_id: a9db34eb-67f8-45f0-b87b-aa8cf9037cd9
+                      donee_id: 283fc95d-d1cc-4b5a-9827-61e4b27f0b5c
+                      title: Ayuda para mis perritos
+                      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                      category: Animales
+                      required_amount:
+                        amount: 500
+                        currency: MXN
+                      creation_date: '2020-07-01T14:59:55.711Z'
+                      expiration_date: '2020-09-01T14:59:55.711Z'
+                      evidences:
+                        - 1d9374f0-f430-45ad-a546-94f444e7c5ce
+                        - 9274306c-e818-4242-b2ab-b3117e2f8835
+                        - 66aae630-a5ac-4798-81c8-ff2ca81876d5
+                        - b901e9ce-6282-4199-9598-6fb29f05d747
+                      proofs:
+                        - 5f35050b-9121-437b-bbff-c56c2972fb30
+                        - 7d5c4f45-6ee8-4a5f-a405-5d21252686e6
+                        - 5cf2589b-7455-438f-bdd8-adf81d05eb7b
+                      review:
+                        user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+                        approval: Pending
+                        modification_date: '2020-06-01T14:59:55.711Z'
+                        comment: ''
+                      metadata:
+                        browser_details:
+                          code_name: Mozilla
+                          name: Netscape
+                          version: 5.0 (Windows)
+                          cookies_nabled: 'true'
+                          platform: Win32
+                          user_agent_header: 'Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0'
       operationId: get-causes
-    parameters:
-      - schema:
-          type: number
-          minimum: 1
-          maximum: 50
-        name: limitTo
-        in: path
-        required: true
-      - schema:
-          type: string
-        name: orderBy
-        in: path
-        required: true
-      - schema:
-          type: string
-        name: filterBy
-        in: path
-        required: true
+      parameters:
+        - schema:
+            type: integer
+            default: '25'
+            format: int32
+            minimum: 1
+            maximum: 100
+          in: query
+          name: limitTo
+          description: Limits the number of records returned.
+        - schema:
+            type: string
+            enum:
+              - Category
+              - Amount
+              - Donee
+              - Name
+            default: Name
+          in: query
+          name: filterBy
+          description: Filters by the option declared.
+        - schema:
+            type: string
+            default: title
+            enum:
+              - category
+              - amount
+              - title
+          in: query
+          name: orderBy
+          description: Orders the records returned by the specified label.
+      description: Lists all the causes in database.
+    parameters: []
+    post:
+      summary: ''
+      operationId: post-causes
+      responses:
+        '201':
+          description: Created
+      description: Creates a new cause
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cause'
+        description: The cause object to be created
+      tags:
+        - Causes
   '/causes/{cause_id}':
     parameters:
       - schema:
           type: string
+          format: uuid
+          example: 4914e403-2c36-46fb-90d8-4baab4e62067
+          pattern: "(\\{){0,1}[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}(\\}){0,1}"
         name: cause_id
         in: path
         required: true
+        description: Unique identifier of the cause (Guid).
     get:
-      summary: Get a specific cause by id
+      summary: Get a specific cause
       tags:
         - Causes
       responses:
@@ -91,6 +153,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Cause'
       operationId: get-causes-cause_id
+      parameters: []
+      description: Gets a specific cause by its id.
+    delete:
+      summary: Delete a specific cause
+      operationId: delete-causes-cause_id
+      responses:
+        '200':
+          description: OK
+      description: Deletes a cause from database.
+      tags:
+        - Causes
   '/causes/{cause_id}/evidences':
     parameters:
       - schema:
@@ -98,10 +171,10 @@ paths:
         name: cause_id
         in: path
         required: true
+        allowEmptyValue: false
     get:
-      summary: Get all evidences from a specific cause
+      summary: Get a list of evidences of a cause
       tags:
-        - Causes
         - Evidences
       responses:
         '200':
@@ -110,15 +183,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Evidence'
+              examples: {}
             application/xml:
               schema:
                 type: object
       operationId: get-causes-cause_id-evidences
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: limitTo
+          description: Limits the number of records returned.
+      description: Lists all evidences from a specific cause.
+    post:
+      summary: ''
+      operationId: post-causes-cause_id-evidences
+      responses:
+        '201':
+          description: Created
+      description: Creates a new evidence object for a specific cause
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evidence'
+            examples:
+              'Example: Image evidence':
+                value:
+                  evidence_id: 5fc45c96-6357-4b65-af0c-c9eb0db51f88
+                  description: Esta es la receta que el médico me mandó
+                  type: image
+                  creation_date: '2020-10-31T01:48:52Z'
+                  file:
+                    mime_type: image/jpeg
+                    size: 30kb
+                    properties:
+                      height: 100px
+                      width: 200px
+                    url: s3.ayudamex.bucket.something
+        description: Evidence to be attached to the cause specified by its id.
+      tags:
+        - Evidences
   '/causes/{cause_id}/proofs':
     get:
-      summary: Get all proofs for a specific cause
+      summary: Get a list of proofs of a cause
       tags:
-        - Causes
         - Proofs
       responses:
         '200':
@@ -127,15 +236,439 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Proof'
+              examples:
+                'Example: Video proof ':
+                  value:
+                    proof_id: 8c3661ac-67d6-4d58-8d91-a6701966c6d3
+                    description: 'Gracias a ustedes, mi perrito ya puede correr!'
+                    type: video
+                    creation_date: '2020-10-31T01:48:52Z'
+                    file:
+                      mime_type: video/mp4
+                      size: 2442kb
+                      properties:
+                        duration: 15s
+                      url: s3.ayudamex.bucket.something
       operationId: get-causes-cause_id-proofs
-      description: ''
+      description: 'Lists all the proofs a cause may have. Proofs will be a available once a cause has been accomplished. '
     parameters:
       - schema:
           type: string
         name: cause_id
         in: path
         required: true
-  '/causes/{cause_id}/proofs{proof_id}':
+        description: Unique identifier of the cause (Guid).
+    post:
+      summary: Create a cause proof
+      operationId: post-causes-cause_id-proofs
+      responses:
+        '201':
+          description: Created
+      description: Adds a proof to the cause specified by the id.
+      tags:
+        - Proofs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Proof'
+            examples:
+              'Example: Video proof':
+                value:
+                  proof_id: 8c3661ac-67d6-4d58-8d91-a6701966c6d3
+                  description: 'Gracias a ustedes, mi perrito ya puede correr!'
+                  type: video
+                  creation_date: '2020-10-31T01:48:52Z'
+                  file:
+                    mime_type: video/mp4
+                    size: 2442kb
+                    properties:
+                      duration: 15s
+                    url: s3.ayudamex.bucket.something
+        description: Proof to be attached.
+  '/causes/{cause_id}/proofs/{proof_id}':
+    parameters:
+      - schema:
+          type: string
+        name: cause_id
+        in: path
+        required: true
+        description: Unique identifier of the cause (Guid).
+      - schema:
+          type: string
+        name: proof_id
+        in: path
+        required: true
+        description: Unique identifier of a proof (Guid).
+    get:
+      summary: Get a specific proof of a cause
+      tags:
+        - Proofs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proof'
+      operationId: get-causes-cause_id-proofs-proof_id
+      parameters: []
+      description: Gets a proof for a specific cause by its id.
+  '/causes/{cause_id}/reviews':
+    parameters:
+      - schema:
+          type: string
+          pattern: "(\\{){0,1}[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}(\\}){0,1}"
+        name: cause_id
+        in: path
+        required: true
+        description: Unique identifier of the cause (Guid).
+    get:
+      summary: Gets a list of reviews of a cause
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+              examples:
+                ArrayOfReviews:
+                  value:
+                    - review_id: b2e20c51-f0f7-4723-a482-a3c200d6ad9b
+                      user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+                      approval: Rejected
+                      creation_date: '2020-06-01T14:59:55.711Z'
+                      comment: El archivo adjunto no corresponde a un comprobante de domicilio.
+                    - review_id: 06be610f-2609-46ee-9ca4-93601bb1a7ac
+                      user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+                      approval: Approved
+                      creation_date: '2020-06-04T12:48:31.824Z'
+                      comment: ''
+      operationId: get-causes-cause_id-review
+      description: 'Returns a list of reviews for a specific cause. **This is intended for administration usage.**'
+      parameters: []
+      tags:
+        - Reviews
+    post:
+      summary: Create a new review
+      operationId: post-causes-cause_id-review
+      responses:
+        '201':
+          description: Created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+            examples:
+              SingleReview:
+                value:
+                  review_id: b2e20c51-f0f7-4723-a482-a3c200d6ad9b
+                  user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+                  approval: Rejected
+                  modification_date: '2020-06-01T14:59:55.711Z'
+                  comment: El archivo adjunto no corresponde a un comprobant de domicilio.
+        description: Creates a new review for a specific cause. This is intended for administration usage.
+      description: 'Creates a new review for a specific cause. **This is intended for administration usage.**'
+      tags:
+        - Reviews
+  /donations:
+    get:
+      summary: Gets a list of donations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donation'
+      operationId: get-donations
+      description: Lists all the donations made from any donnor to any cause.
+      tags:
+        - Donations
+  /users:
+    get:
+      summary: Get a list of users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      operationId: get-users
+      description: Lists all users signed on the platform
+    post:
+      summary: Create a new user
+      operationId: post-users
+      responses:
+        '200':
+          description: OK
+      description: Creates a new user of a specific type
+      tags:
+        - Users
+  /donees:
+    get:
+      summary: Get a list of donees
+      tags:
+        - Donees
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donee'
+      operationId: get-donees
+      description: Lists all the donees matching the parameters set.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: limitTo
+        - schema:
+            type: string
+          in: query
+          name: orderBy
+        - schema:
+            type: string
+          in: query
+          name: filterBy
+    post:
+      summary: Create a new donee
+      operationId: post-donees
+      responses:
+        '201':
+          description: Created
+      tags:
+        - Donees
+      description: Creates a new donee with the attributes specified in the body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donee'
+        description: Donee object to create.
+  /donnors:
+    get:
+      summary: Get a list of donnors
+      tags:
+        - Donnors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donnor'
+      operationId: get-donnors
+      description: Lists all the donnors matching the parameters set.
+    post:
+      summary: Create a new donnor
+      operationId: post-donnors
+      responses:
+        '201':
+          description: Created
+      description: Creates a new donnor with the attributes specified in the body.
+      tags:
+        - Donnors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donnor'
+        description: Donnor object to create.
+  '/donees/{donee_id}':
+    parameters:
+      - schema:
+          type: string
+        name: donee_id
+        in: path
+        required: true
+    get:
+      summary: Get a specific donee
+      tags:
+        - Donees
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donee'
+      operationId: get-donees-donee_id
+      description: Gets a specific donee by its id.
+  '/donees/{donee_id}/documents':
+    parameters:
+      - schema:
+          type: string
+        name: donee_id
+        in: path
+        required: true
+    get:
+      summary: Get a list of documents of a donee
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+      operationId: get-donees-donee_id-documents
+      description: Gets the documents associated to the specific donee.
+      tags:
+        - Documents
+    post:
+      summary: Create a new document for a donee
+      operationId: post-donees-donee_id-documents
+      responses:
+        '201':
+          description: Created
+      description: Adds a document object to the specified donee.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        description: The document to be attached.
+      tags:
+        - Documents
+  '/causes/{cause_id}/donations/{donation_id}/transfer':
+    parameters:
+      - schema:
+          type: string
+        name: cause_id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: donation_id
+        in: path
+        required: true
+    get:
+      summary: Get the trasnfer of a donation
+      tags:
+        - Transfers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+      operationId: get-causes-cause_id-donations-donation_id-transfer
+      description: Gets the transfer object attached to the donation specified for the cause.
+  '/donnors/{donnor_id}/documents':
+    parameters:
+      - schema:
+          type: string
+        name: donnor_id
+        in: path
+        required: true
+    get:
+      summary: Get a list of documents of a donnor
+      tags:
+        - Documents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+      operationId: get-donnors-donnor_id-documents
+      description: Gets the set of documents used to identify a specific donnor.
+    post:
+      summary: Create a new document for a donnor
+      operationId: post-donnors-donnor_id-documents
+      responses:
+        '201':
+          description: Created
+      description: Adds a document object to the specified donnor.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        description: The document to be attached.
+      tags:
+        - Documents
+  '/donnors/{donnor_id}':
+    parameters:
+      - schema:
+          type: string
+        name: donnor_id
+        in: path
+        required: true
+    get:
+      summary: Get a specific donnor
+      tags:
+        - Donnors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donnor'
+      operationId: get-donnors-donnor_id
+      description: Gets a specific donnor by its id.
+  '/causes/{cause_id}/evidences/{evidence_id}/files':
+    parameters:
+      - schema:
+          type: string
+        name: cause_id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: evidence_id
+        in: path
+        required: true
+    get:
+      summary: Get the file of an evidence
+      tags:
+        - Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+      operationId: get-causes-cause_id-evidences-evidence_id-files
+      description: Get the attached file to an evidence.
+    post:
+      summary: Create a file for an evidence
+      operationId: post-causes-cause_id-evidences-evidence_id-files
+      responses:
+        '201':
+          description: Created
+      description: Adds a file and uploads it to S3.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        description: ''
+      tags:
+        - Files
+  '/causes/{cause_id}/proofs/{proof_id}/files':
     parameters:
       - schema:
           type: string
@@ -148,18 +681,68 @@ paths:
         in: path
         required: true
     get:
-      summary: Get a specific proof of a cause
+      summary: Get a file of a proof
       tags:
-        - Causes
-        - Proofs
+        - Files
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Proof'
-      operationId: get-causes-cause_id-proofs-proof_id
+                $ref: '#/components/schemas/File'
+      operationId: get-causes-cause_id-proofs-proof_id-files
+      description: Get the attached file to an proof.
+    post:
+      summary: Create a new file for a proof
+      operationId: post-causes-cause_id-proofs-proof_id-files
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Files
+      description: Adds a file to a specific proof and uploads it to S3.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        description: The file object to be attached.
+  '/causes/{cause_id}/donations':
+    parameters:
+      - schema:
+          type: string
+        name: cause_id
+        in: path
+        required: true
+    get:
+      summary: Get a list of donations
+      tags:
+        - Donations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donation'
+      operationId: get-causes-cause_id-donations
+      description: Gets a list of donations of a specific casue based on the parameters.
+    post:
+      summary: Create a new donation
+      operationId: post-causes-cause_id-donations
+      responses:
+        '201':
+          description: Created
+      description: Create a new donation object for the specified cause.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donation'
+        description: The donation object to be attached.
+      tags:
+        - Donations
 components:
   schemas:
     Cause:
@@ -200,6 +783,8 @@ components:
               platform: Win32
               user_agent_header: 'Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0'
       description: 'This is the reason a donee wants to be helped. It offers evidences in the first stage, and optional proofs once the goal has reached.'
+      x-tags:
+        - Causes
       properties:
         cause_id:
           type: string
@@ -220,12 +805,16 @@ components:
             - Medio ambiente
         required_amount:
           type: object
+          required:
+            - amount
+            - currency
           properties:
             amount:
               type: number
               format: double
             currency:
               type: string
+              default: MXN
         creation_date:
           type: string
         expiration_date:
@@ -233,35 +822,30 @@ components:
         evidences:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Evidence'
         proofs:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Proof'
         metadata:
           type: object
-        review:
-          type: object
-          properties:
-            user_id:
-              type: string
-            status:
-              type: string
-              enum:
-                - Pending
-                - Approved
-                - Rejected
-            modification_date:
-              type: string
-            comment:
-              type: string
         status:
           type: string
-      x-tags:
-        - Causes
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
+      required:
+        - cause_id
+        - donee_id
+        - title
+        - description
+        - category
+        - required_amount
     User:
       title: User
       type: object
+      description: User signed in AyudaMex platform.
       properties:
         user_id:
           type: string
@@ -269,24 +853,37 @@ components:
         phone:
           type: string
           description: The user’s phone number
-        emailemail:
+        email:
           type: string
+          format: binary
+          description: The user’s email.
         status:
           type: string
           enum:
             - Pending
-            - Approved
-            - Rejected
             - Banned
+            - Active
+          default: Active
+      required:
+        - user_id
+        - phone
+        - email
+        - status
+      x-examples:
+        'Example: User':
+          user_id: 3061bff3-ce6b-4818-90fa-83f2a9d88e51
+          name: Arturo Díaz Sarmiento
+          email: emaildealfuien@hotmail.com
+          phone_number: '+525558462553'
+          status: Active
       x-tags:
-        - User
-      description: User signed in AyudaMex platform.
+        - Users
     Donee:
       title: Donee
       type: object
       description: A person that receives money in order to accomplish a cause exposed.
       x-examples:
-        Donee Example:
+        'Example: Donee from OAX':
           donee_id: 2843ce41-5a7d-4a1c-8ee4-c254edcda01d
           user_id: 39bf7202-5933-4e6d-ba54-792466f3bfb6
           name: Artemio Sánchez Iguala
@@ -320,11 +917,10 @@ components:
             document:
               category: Factura
               id: 86d17736-1b4c-499b-b332-784e7e2c6bef
-      x-tags:
-        - Donee
       properties:
         donee_id:
           type: string
+          format: uuid
         user_id:
           type: string
         name:
@@ -332,12 +928,14 @@ components:
         birthdate:
           type: string
           format: date
+          example: '1973-08-24'
         gender:
           type: string
           enum:
             - M
             - F
             - I
+          example: F
         document:
           type: object
           properties:
@@ -357,6 +955,7 @@ components:
             state:
               type: string
               description: 'Three-letter state code (3-letter code (ISO 3166-2:MX).'
+              example: MX-OAX
             city:
               type: string
               description: 'City, district, suburb, town, or village.'
@@ -369,6 +968,13 @@ components:
             postal_code:
               type: string
               description: ZIP or postal code.
+              example: '03660'
+          required:
+            - country
+            - state
+            - city
+            - street1
+            - postal_code
         job:
           type: object
           properties:
@@ -421,46 +1027,54 @@ components:
                     - Quincenal
                     - Mensual
               required:
+                - amount
                 - currency
+          required:
+            - category
+            - description
+        account:
+          type: object
+          properties:
+            bank:
+              type: string
+            account_number:
+              type: string
+            name:
+              type: string
+      required:
+        - donee_id
+        - user_id
+        - name
+        - birthdate
+        - gender
+      x-tags:
+        - Donees
     Donnor:
       title: Donnor
       type: object
       description: A person that gives money in order to help to accomplish a cause exposed.
       x-examples:
-        Donee Example:
+        'Example: Donnor of CMX':
           donee_id: 2843ce41-5a7d-4a1c-8ee4-c254edcda01d
           user_id: 39bf7202-5933-4e6d-ba54-792466f3bfb6
-          name: Artemio Sánchez Iguala
-          birthdate: 1954/06/05
-          gender: M
-          curp: SAIA540605HOXSAC06
+          name: Margarita Herrera Pacheco
+          birthdate: 1997/04/05
+          gender: F
+          curp: HEPM970405MDFCOZ07
           document:
             category: Identificación Oficial
             id: 86d17736-1b4c-499b-b332-784e7e2c6bef
           address:
             document_id: 6d483dda-4454-48b5-8bc3-0c06fec05b6d
             country: MX
-            state: MX-OAX
-            city: Santiago Amoltepec
-            street1: 'Ranchería, Barranca Cosida'
-            street2: Casa 4
-            zip_code: '71388'
+            state: MX-CMX
+            city: Coyoacan
+            street1: Av. Universidad 1200
+            street2: Xoco
+            zip_code: '03330'
             document:
               category: Teléfono
               id: 9117af23-7293-4052-ab35-9fc5d2ad38bc
-          job:
-            type: Autoempleado
-            description: Artesano
-            seniority:
-              total: 30
-              unit: años
-            income:
-              amount: '100'
-              currency: MXN
-              frequency: Diaria
-            document:
-              category: Factura
-              id: 86d17736-1b4c-499b-b332-784e7e2c6bef
       properties:
         donee_id:
           type: string
@@ -562,22 +1176,35 @@ components:
               required:
                 - currency
       x-tags:
-        - Donnor
+        - Donnors
     Document:
       title: Document
       type: object
       x-examples:
-        Documento de identidad:
+        'Example: Identity document':
           document_id: 5fc45c96-6357-4b65-af0c-c9eb0db51f88
-          purpose: Identidad
+          purpose: 'Identificación oficial '
+          type: Credencial INE
           creation_date: '2020-10-31T01:48:52Z'
-          file_id: 232334789-
-          review:
-            user_id: image/jpeg
-            status: 300 bytes
-            comment: ''
+          file:
+            file_id: 24f03cd2-0610-4875-abf7-d61cd41dbc6e
+            filename: ine2000.jpg
+            mime_type: image/jpeg
+            size: 300 bytes
             url: s3.ayudamex.bucket.something
+            creation_date: '2020-09-01T09:00:22.089Z'
+            properties:
+              height: 100px
+              width: 200px
+          review:
+            review_id: b2e20c51-f0f7-4723-a482-a3c200d6ad9b
+            user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+            approval: Approved
+            creation_date: '2020-06-01T14:59:55.711Z'
+            comment: ''
       description: A piece of electronic matter that provides information or evidence or that serves as an official record for an aspect of a user
+      x-tags:
+        - Documents
       properties:
         document_id:
           type: string
@@ -585,108 +1212,165 @@ components:
         purpose:
           type: string
           enum:
-            - Identidad
-            - Trabajo
-            - Domicilio
-            - Ingresos
-        document_type:
+            - Comprobante de domicilio
+            - Comprobante de ingresos
+            - Identificación oficial
+        type:
           type: string
           enum:
-            - INE
-            - IFE
-            - TELMEX
-            - CFE
+            - Recibo de Teléfono
+            - Credencial INE
+            - Credencial IFE
+            - Recibo de Luz
+            - Recibo de Gas
+            - Recibo de predial
+            - Recibo de agua
+            - Factura
+            - Estado de cuenta
         creation_date:
           type: string
+          format: date-time
         file:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/File'
         review:
-          type: object
-          properties:
-            user_id:
-              type: string
-            status:
-              type: string
-              enum:
-                - Pending
-                - Approved
-                - Rejected
-            modification_date:
-              type: string
-            comment:
-              type: string
-      x-tags:
-        - Document
+          $ref: '#/components/schemas/Review'
+      required:
+        - document_id
+        - purpose
+        - type
+        - creation_date
+        - file
     File:
       title: File
       type: object
       x-examples:
-        Archivo de imagen:
-          mime_type: image/jpeg
+        'Example: Image file':
+          file_id: 24f03cd2-0610-4875-abf7-d61cd41dbc6e
           filename: ine2000.jpg
+          mime_type: image/jpeg
           size: 300 bytes
+          url: s3.ayudamex.bucket.something
+          creation_date: '2020-09-01T09:00:22.089Z'
           properties:
             height: 100px
             width: 200px
-          creation_date: ''
-          url: s3.ayudamex.bucket.something
+      description: An object for holding the many documents hosted by AyudaMex.
+      x-tags:
+        - Files
       properties:
-        format:
+        file_id:
           type: string
+          format: uuid
+        filename:
+          type: string
+        mime_type:
+          type: string
+          enum:
+            - image/jpeg
+            - application/pdf
+            - video/mpeg
         size:
           type: string
-        properties:
-          type: object
-          properties:
-            height:
-              type: string
-            width:
-              type: string
         url:
           type: string
           format: uri
-        filename`:
-          type: string
         creation_date:
           type: string
-      x-tags:
-        - File
-      description: A object for holding the many documents hosted by AyudaMex.
+          format: date-time
+        properties:
+          type: object
+          description: Stores any object of properties refering to the specific file.
+      required:
+        - file_id
+        - filename
+        - mime_type
+        - size
+        - url
     Evidence:
       title: Evidence
       type: object
-      properties:
-        evidence_id:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        creation_date:
-          type: string
-        file_id:
-          type: string
       x-tags:
         - Evidences
       description: A document that illustrates the need of the cause.
+      x-examples:
+        'Example: Image evidence':
+          evidence_id: 5fc45c96-6357-4b65-af0c-c9eb0db51f88
+          description: Esta es la receta que el médico me mandó
+          type: image
+          creation_date: '2020-10-31T01:48:52Z'
+          file:
+            mime_type: image/jpeg
+            size: 30kb
+            properties:
+              height: 100px
+              width: 200px
+            url: s3.ayudamex.bucket.something
+      properties:
+        evidence_id:
+          type: string
+          format: uri
+        description:
+          type: string
+          maxLength: 500
+          minLength: 50
+        type:
+          type: string
+          enum:
+            - image
+            - document
+            - video
+        creation_date:
+          type: string
+          format: date-time
+        file:
+          $ref: '#/components/schemas/File'
+      required:
+        - evidence_id
+        - description
+        - type
+        - creation_date
+        - file
     Proof:
       title: Proof
       type: object
+      description: Evidence that help to establish that the money recieved was used to accomplish the cause.
+      x-examples:
+        'Example: Video proof':
+          proof_id: 8c3661ac-67d6-4d58-8d91-a6701966c6d3
+          description: 'Gracias a ustedes, mi perrito ya puede correr!'
+          type: video
+          creation_date: '2020-10-31T01:48:52Z'
+          file:
+            mime_type: video/mp4
+            size: 2442kb
+            properties:
+              duration: 15s
+            url: s3.ayudamex.bucket.something
+      x-tags:
+        - Proofs
       properties:
         proof_id:
           type: string
-        title:
-          type: string
+          format: uuid
         description:
           type: string
+        type:
+          type: string
+          enum:
+            - image
+            - document
+            - video
         creation_date:
           type: string
-        file_id:
-          type: string
-      x-tags:
-        - Proof
-      description: Evidence that help to establish that the money recieved was used to accomplish the cause.
+          format: date-time
+        file:
+          $ref: '#/components/schemas/File'
+      required:
+        - proof_id
+        - description
+        - type
+        - creation_date
+        - file
     Donation:
       title: Donation
       type: object
@@ -711,12 +1395,13 @@ components:
               type: string
         donation_date:
           type: string
-      x-tags:
-        - Donation
       description: 'The act of transfering money to a donee from a donnor in order to benefit a cause. '
+      x-tags:
+        - Donations
     Transfer:
       title: Transfer
       type: object
+      description: The object that hold the information of the transaction from donnor to donee using a given provider.
       properties:
         transfer_id:
           type: string
@@ -731,10 +1416,44 @@ components:
               type: string
         status:
           type: string
-        transfer_date:
+        creation_date:
           type: string
-        '':
-          type: string
+      required:
+        - transfer_id
       x-tags:
-        - Transfer
-      description: The object that hold the information of the transaction from donnor to donee using a given provider.
+        - Transfers
+    Review:
+      title: Review
+      type: object
+      x-examples:
+        Review-Example:
+          review_id: b2e20c51-f0f7-4723-a482-a3c200d6ad9b
+          user_id: 61b9c5ac-96c6-4946-ad51-106dab2b0c61
+          approval: Approved
+          creation_date: '2020-06-01T14:59:55.711Z'
+          comment: ''
+      description: 'Review from an admin user for a specidifc object. The approval may point to a cause, a document or a person. '
+      x-tags:
+        - Reviews
+      properties:
+        review_id:
+          type: string
+        user_id:
+          type: string
+        approval:
+          type: string
+          enum:
+            - Approved
+            - Rejected
+          default: Pending
+        creation_date:
+          type: string
+          format: date-time
+        comment:
+          type: string
+      required:
+        - review_id
+        - user_id
+        - approval
+        - creation_date
+  securitySchemes: {}
