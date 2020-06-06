@@ -10,27 +10,27 @@ servers:
     description: Development
 tags:
   - name: Causes
-    description: Everything about your Pets
+    description: Causes exposed by donees.
   - name: Proofs
-    description: Access to Petstore orders
+    description: Proofs of causes accomplished.
   - name: Users
-    description: Operations about user
+    description: Users of AyudaMex.
   - name: Donees
-    description: Operations about user
+    description: Users who need to be helped.
   - name: Donnors
-    description: Operations about user
+    description: Users who want to help.
   - name: Donations
-    description: Operations about user
+    description: Operations on causes from the donee.
   - name: Reviews
-    description: Operations about user
+    description: Approvals from admin users.
   - name: Evidences
-    description: Operations about user
+    description: Evidences to illustrate causes.
   - name: Files
-    description: Operations about user
+    description: Files attached to different objects.
   - name: Transfers
-    description: Operations about user
+    description: Money transfers using a specific payment platform.
   - name: Documents
-    description: Operations about user
+    description: Documents linked to users.
 paths:
   /causes:
     get:
