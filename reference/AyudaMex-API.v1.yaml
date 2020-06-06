@@ -6,7 +6,7 @@ info:
   contact:
     name: Alejandro Bugajski
 servers:
-  - url: 'https://hzcqtp3m22.execute-api.us-east-2.amazonaws.com/dev'
+  - url: 'https://43c0g83awb.execute-api.us-east-2.amazonaws.com/dev'
     description: Development
 tags:
   - name: Causes
